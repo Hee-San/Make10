@@ -1,0 +1,110 @@
+<html>
+  <head>
+    <meta charaset="UTF-8" />
+    <title>Make10</title>
+  </head>
+
+  <body>
+    <div id="app">
+      <div class="target">
+        make
+        <input class="sum" type="number" v-model="target" @change="changeNum" />
+      </div>
+
+      <div class="args">
+        <div class="argInput" v-for="i in numArgs ">
+          <input
+            type="number"
+            min="0"
+            max="9"
+            v-model="args[i-1]"
+            v-on:change="changeNum"
+          />
+        </div>
+      </div>
+
+      <div class="answers">
+        <div v-for="formula in formulas ">
+          {{ formula }}
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script>
+  const app = new Vue({
+    el: "#app",
+    data: {
+      target: "10",
+      numArgs: 4,
+      args: [],
+      formulas: ["NA"]
+    },
+    created: function() {
+      this.setDate();
+      this.changeNum();
+    },
+    methods: {
+      setDate: function() {
+        let now = new Date();
+        let month = now.getMonth() + 1; //月 1月=0なのでインクリメント
+        let day = now.getDate(); //日
+        this.args = [
+          Math.floor(month / 10).toFixed(),
+          (month % 10).toFixed(),
+          Math.floor(day / 10).toFixed(),
+          (day % 10).toFixed()
+        ];
+      },
+      changeNum: function() {
+        var bracketsPatterns = [
+          "((a?b)!c)@d",
+          "(a?b)!(c@d)",
+          "(a?(b!c))@d",
+          "a?((b!c)@d)",
+          "a?(b!(c@d))"
+        ];
+        const opPlaceChar = ["?", "!", "@"];
+        const operators = ["+", "-", "*", "/"];
+
+        // 式の生成
+
+        var formulaPatterns = bracketsPatterns;
+        for (let i = 0; i < opPlaceChar.length; i++) {
+          const opc = opPlaceChar[i];
+          var _formulaPatterns = [];
+          formulaPatterns.map(bp =>
+            operators.map(op => _formulaPatterns.push(bp.replace(opc, op)))
+          );
+          formulaPatterns = _formulaPatterns;
+        }
+
+        let formulas = [];
+
+        formulaPatterns.map(fp => {
+          let f = fp;
+          f = f
+            .replace("a", this.args[0])
+            .replace("b", this.args[1])
+            .replace("c", this.args[2])
+            .replace("d", this.args[3]);
+
+          console.log(f);
+          let ans = 0;
+          eval("ans = " + f);
+          if (ans == this.target) {
+            formulas.push(f);
+          }
+        });
+
+        if (formulas.length === 0) {
+          this.formulas = ["NA"];
+        } else {
+          this.formulas = formulas;
+        }
+      }
+    }
+  });
+</script>
