@@ -2,25 +2,37 @@
 <html>
   <head>
     <meta charaset="UTF-8" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/element-ui/lib/theme-chalk/index.css"
+    />
     <title>Make10</title>
   </head>
 
   <body>
     <div id="app">
-      <div class="target">
+      <h1 class="target">
         make
-        <input class="sum" type="number" v-model="target" @change="changeNum" />
-      </div>
+        <el-input-number
+          class="sum"
+          type="number"
+          v-model="target"
+          @change="changeNum"
+          controls-position="right"
+        ></el-input-number>
+      </h1>
 
       <div class="args">
-        <div class="argInput" v-for="i in numArgs ">
-          <input
-            type="number"
-            min="0"
-            max="9"
+        <div
+          class="argInput"
+          v-for="i in numArgs"
+          style="display:inline-block;"
+        >
+          <el-input-number
             v-model="args[i-1]"
-            v-on:change="changeNum"
-          />
+            @change="changeNum"
+            controls-position="right"
+          ></el-input-number>
         </div>
       </div>
 
@@ -34,6 +46,8 @@
 </html>
 
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+
 <script>
   const app = new Vue({
     el: "#app",
@@ -96,7 +110,7 @@
           let ans = 0;
           eval("ans = " + f);
           if (ans == this.target) {
-            formulas.push(f);
+            formulas.push(this.target + " = " + f);
           }
         });
 
