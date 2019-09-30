@@ -11,29 +11,35 @@
 
   <body>
     <div id="app">
-      <h1 class="target">
-        make
+      <h1>Make 10 Solver</h1>
+      <p>
+        "Make
+        10"とは、4つの数字と算術演算子(+,-,*,/)を使って10を作るパズルです。
+        <br />
+        別名 "テンパズル" とも呼ばれます。
+      </p>
+      <h2 class="target">
+        Make
         <el-input-number
-          class="sum"
+          id="sum"
           type="number"
           v-model="target"
           @change="changeNum"
           controls-position="right"
         ></el-input-number>
-      </h1>
+      </h2>
 
       <div class="args">
-        <div
+        <el-input-number
           class="argInput"
+          controls-position="right"
+          :min="0"
+          :max="9"
           v-for="i in numArgs"
-          style="display:inline-block;"
-        >
-          <el-input-number
-            v-model="args[i-1]"
-            @change="changeNum"
-            controls-position="right"
-          ></el-input-number>
-        </div>
+          :key="i.id"
+          v-model="args[i-1]"
+          @change="changeNum"
+        ></el-input-number>
       </div>
 
       <div class="answers">
@@ -106,7 +112,7 @@
             .replace("c", this.args[2])
             .replace("d", this.args[3]);
 
-          console.log(f);
+          // console.log(f);
           let ans = 0;
           eval("ans = " + f);
           if (ans == this.target) {
@@ -123,3 +129,43 @@
     }
   });
 </script>
+
+<style>
+  @import url(https://fonts.googleapis.com/css?family=Quattrocento+Sans|M+PLUS+1p);
+  body {
+    text-align: center;
+    font-family: "Quattrocento Sans", "M PLUS 1p";
+  }
+
+  h1 {
+    margin: 60px auto 10px;
+    text-transform: uppercase;
+    letter-spacing: 10px;
+  }
+
+  .target {
+    margin: 60px auto 20px;
+  }
+
+  .el-input-number {
+    width: 100px;
+  }
+
+  .el-input__inner {
+    font-family: "Quattrocento Sans";
+    color: black;
+    font-weight: bold;
+  }
+
+  .el-input {
+    font-size: unset;
+  }
+
+  .argInput {
+    margin: 4px;
+  }
+
+  .answers {
+    margin: 20px auto;
+  }
+</style>
